@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import KanbanBoardContainer from './KanbanBoardContainer';
+import KanbanBoardContainer from './kanban/KanbanBoardContainer';
 import './index.css';
 import * as firebase from 'firebase';
 
