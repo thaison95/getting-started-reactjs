@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import KanbanBoardContainer from './kanban/KanbanBoardContainer';
 import './index.css';
 import * as firebase from 'firebase';
-
+import KanbanBoardContainer from './kanban/KanbanBoardContainer';
+// import AnimatedShoppingList from './animated-shopping/AnimatedShoppingList';
+// import Container from './drag-drop/Container';
 let config = {
     apiKey: "AIzaSyAU7auaUdy_gfExBBuRy5zbP1MjT7z__V8",
     authDomain: "blazing-fire-3588.firebaseapp.com",
@@ -15,6 +16,7 @@ let config = {
 firebase.initializeApp(config);
 
 ReactDOM.render(
+
   <KanbanBoardContainer/>,
   document.getElementById('root')
 );

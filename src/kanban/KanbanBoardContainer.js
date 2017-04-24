@@ -1,6 +1,7 @@
 import React from 'react';
 import KanbanBoard from './KanbanBoard';
 import * as firebase from 'firebase';
+import update from 'react-addons-update';
 
 export class KanbanBoardContainer extends React.Component {
     constructor(props, context) {
@@ -18,7 +19,7 @@ export class KanbanBoardContainer extends React.Component {
     componentDidMount() {
         const bag = this.state.db.ref('Todo');
         bag.on('value', snap => {
-            console.log(snap.val());
+            // console.log(snap.val());
             this.setState({cardsList: snap.val()});
         });
 
@@ -52,6 +53,30 @@ export class KanbanBoardContainer extends React.Component {
         this.state.db.ref(`Todo/${cardIndex}/tasks/${taskIndex}`).update({done: !this.state.cardsList[cardIndex].tasks[taskIndex].done});
     }
 
+    updateCardStatus(cardId, listId){
+
+        let cardIndex = this.state.cardsList.findIndex((card)=>card.id === cardId);
+
+        let card = this.state.cardsList[cardIndex];
+
+        if(card.status !== listId){
+
+            this.setState(update(this.state, {
+                cardsList: {
+                    [cardIndex]: {
+                        status: { $set: listId }
+                    }
+                }
+            }));
+        }
+    }
+
+    persistCardDrag (cardId, status) {
+        let cardIndex = this.state.cardsList.findIndex((card)=>card.id === cardId);
+        let card = this.state.cardsList[cardIndex];
+        this.state.db.ref(`Todo/${cardIndex}`).update({status: card.status});
+    }
+
     render() {
         return (
             <KanbanBoard cards={this.state.cardsList}
@@ -59,6 +84,10 @@ export class KanbanBoardContainer extends React.Component {
                              add: this.addTask.bind(this),
                              toggle: this.toggleTask.bind(this),
                              delete: this.deleteTask.bind(this)
+                         }}
+                         cardCallbacks={{
+                             updateStatus: this.updateCardStatus.bind(this),
+                             persistCardDrag: this.persistCardDrag.bind(this)
                          }}
             />
         );
